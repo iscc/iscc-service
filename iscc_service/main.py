@@ -12,6 +12,10 @@ class Meta(BaseModel):
     extra: str = ""
 
 
+class Text(BaseModel):
+    text: str = ""
+
+
 @app.get("/")
 def root():
     return {"message": "ISCC Web Service API"}
@@ -30,5 +34,20 @@ def meta_id(meta: Meta):
             "title_trimmed": title_trimmed,
             "extra": meta.extra,
             "extra_trimmed": extra_trimmed,
+        }
+    }
+
+
+@app.post('/generate/content_id_text')
+def content_id_text(text: Text):
+    """Generate ContentID-Text from 'text'"""
+    cid_t = iscc.content_id_text(text.text)
+    return {
+        'content_id': {
+            'type': 'text',
+            'bits': code_to_bits(cid_t),
+            'code': cid_t,
+            'ident': code_to_int(cid_t),
+            'text': text.text,
         }
     }
