@@ -50,49 +50,45 @@ def meta_id(meta: Meta):
     }
 
 
-@app.post('/generate/content_id_text')
+@app.post("/generate/content_id_text")
 def content_id_text(text: Text):
     """Generate ContentID-Text from 'text'"""
     cid_t = iscc.content_id_text(text.text)
     return {
-        'content_id': {
-            'type': 'text',
-            'bits': code_to_bits(cid_t),
-            'code': cid_t,
-            'ident': code_to_int(cid_t),
-            'text': text.text,
+        "content_id": {
+            "type": "text",
+            "bits": code_to_bits(cid_t),
+            "code": cid_t,
+            "ident": code_to_int(cid_t),
+            "text": text.text,
         }
     }
 
 
-@app.post('/generate/data_id')
+@app.post("/generate/data_id")
 def data_id(file: UploadFile = File(...)):
     """Generate DataID from raw binary data"""
     did = iscc.data_id(file.file)
     return {
-        'data_id': {
-            'code': did,
-            'bits': code_to_bits(did),
-            'ident': code_to_int(did),
-        }
+        "data_id": {"code": did, "bits": code_to_bits(did), "ident": code_to_int(did),}
     }
 
 
-@app.post('/generate/instance_id')
+@app.post("/generate/instance_id")
 def instance_id(file: UploadFile = File(...)):
     """Generate InstanceID from raw binary data"""
     iid, tophash = iscc.instance_id(file.file)
     return {
-        'instance_id': {
-            'code': iid,
-            'bits': code_to_bits(iid),
-            'ident': code_to_int(iid),
-            'tophash': tophash
+        "instance_id": {
+            "code": iid,
+            "bits": code_to_bits(iid),
+            "ident": code_to_int(iid),
+            "tophash": tophash,
         }
     }
 
 
-@app.post('/generate/data_instance_id')
+@app.post("/generate/data_instance_id")
 def data_instance_id(file: UploadFile = File(...)):
     """Generate DataID and InstanceID from raw binary data"""
 
@@ -100,17 +96,13 @@ def data_instance_id(file: UploadFile = File(...)):
     file.file.seek(0)
     iid, tophash = iscc.instance_id(file.file)
     return {
-        'data_id': {
-            'code': did,
-            'bits': code_to_bits(did),
-            'ident': code_to_int(did),
+        "data_id": {"code": did, "bits": code_to_bits(did), "ident": code_to_int(did),},
+        "instance_id": {
+            "code": iid,
+            "bits": code_to_bits(iid),
+            "ident": code_to_int(iid),
+            "tophash": tophash,
         },
-        'instance_id': {
-            'code': iid,
-            'bits': code_to_bits(iid),
-            'ident': code_to_int(iid),
-            'tophash': tophash,
-        }
     }
 
 
@@ -127,7 +119,7 @@ def generate_iscc_file(file: UploadFile = File(...)):
 
     fn = safe_filename(file.filename)
     tmp_path = join(APP_DIR, fn)
-    with open(tmp_path, 'wb') as outf:
+    with open(tmp_path, "wb") as outf:
         outf.write(file.file.read())
     r = iscc_from_file(tmp_path, guess=True)
     os.remove(tmp_path)
