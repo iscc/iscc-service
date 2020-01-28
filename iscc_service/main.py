@@ -65,3 +65,39 @@ def data_id(file: UploadFile = File(...)):
             'ident': code_to_int(did),
         }
     }
+
+
+@app.post('/generate/instance_id')
+def instance_id(file: UploadFile = File(...)):
+    """Generate InstanceID from raw binary data"""
+    iid, tophash = iscc.instance_id(file.file)
+    return {
+        'instance_id': {
+            'code': iid,
+            'bits': code_to_bits(iid),
+            'ident': code_to_int(iid),
+            'tophash': tophash
+        }
+    }
+
+
+@app.post('/generate/data_instance_id')
+def data_instance_id(file: UploadFile = File(...)):
+    """Generate DataID and InstanceID from raw binary data"""
+
+    did = iscc.data_id(file.file)
+    file.file.seek(0)
+    iid, tophash = iscc.instance_id(file.file)
+    return {
+        'data_id': {
+            'code': did,
+            'bits': code_to_bits(did),
+            'ident': code_to_int(did),
+        },
+        'instance_id': {
+            'code': iid,
+            'bits': code_to_bits(iid),
+            'ident': code_to_int(iid),
+            'tophash': tophash,
+        }
+    }
