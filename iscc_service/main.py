@@ -1,7 +1,13 @@
+import os
+from os.path import join
+
 from fastapi import FastAPI, UploadFile, File
 import iscc
 from iscc_service.tools import code_to_bits, code_to_int
 from pydantic import BaseModel
+from iscc_cli.lib import iscc_from_file, iscc_from_url
+from iscc_cli import APP_DIR
+from iscc_cli.utils import safe_filename
 
 
 app = FastAPI()
@@ -16,9 +22,15 @@ class Text(BaseModel):
     text: str = ""
 
 
-@app.get("/")
-def root():
-    return {"message": "ISCC Web Service API"}
+class URL(BaseModel):
+    url: str
+
+
+class ISCC(BaseModel):
+    iscc: str
+    norm_title: str
+    tophash: str
+    gmt: str
 
 
 @app.post("/generate/meta_id/")
@@ -100,3 +112,23 @@ def data_instance_id(file: UploadFile = File(...)):
             'tophash': tophash,
         }
     }
+
+
+@app.post("/generate/from_url", response_model=ISCC)
+def generate_iscc_url(url: str):
+    """Generate Full ISCC from URL."""
+    r = iscc_from_url(url, guess=True)
+    return r
+
+
+@app.post("/generate/from_file", response_model=ISCC)
+def generate_iscc_file(file: UploadFile = File(...)):
+    """Generate Full ISCC from Media File."""
+
+    fn = safe_filename(file.filename)
+    tmp_path = join(APP_DIR, fn)
+    with open(tmp_path, 'wb') as outf:
+        outf.write(file.file.read())
+    r = iscc_from_file(tmp_path, guess=True)
+    os.remove(tmp_path)
+    return r
