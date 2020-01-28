@@ -13,6 +13,7 @@ python = "^3.6"
 fastapi = "^0.47.1"
 iscc-cli = "^0.9.1"
 uvicorn = "^0.11.2"
+bitstring = "^3.1.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.0"
