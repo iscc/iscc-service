@@ -2,7 +2,6 @@ from fastapi import FastAPI, UploadFile, File
 import iscc
 from iscc_service.tools import code_to_bits, code_to_int
 from pydantic import BaseModel
-from iscc_cli.lib import iscc_from_file
 
 
 app = FastAPI()
