@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 import iscc
 from iscc_service.tools import code_to_bits, code_to_int
 from pydantic import BaseModel
+from iscc_cli.lib import iscc_from_file
 
 
 app = FastAPI()
@@ -49,5 +50,18 @@ def content_id_text(text: Text):
             'code': cid_t,
             'ident': code_to_int(cid_t),
             'text': text.text,
+        }
+    }
+
+
+@app.post('/generate/data_id')
+def data_id(file: UploadFile = File(...)):
+    """Generate DataID from raw binary data"""
+    did = iscc.data_id(file.file)
+    return {
+        'data_id': {
+            'code': did,
+            'bits': code_to_bits(did),
+            'ident': code_to_int(did),
         }
     }
