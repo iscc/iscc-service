@@ -13,7 +13,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS', '*').split()
+ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", "*").split()
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,6 +22,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 class Meta(BaseModel):
     title: str = ""
