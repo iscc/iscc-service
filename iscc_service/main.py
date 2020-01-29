@@ -8,10 +8,20 @@ from iscc_service.tools import code_to_bits, code_to_int
 from pydantic import BaseModel
 from iscc_cli.lib import iscc_from_file, iscc_from_url
 from iscc_cli import APP_DIR
+from starlette.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
 
+ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS', '*').split()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Meta(BaseModel):
     title: str = ""
