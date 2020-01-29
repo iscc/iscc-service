@@ -1,5 +1,6 @@
 import os
-from os.path import join
+import uuid
+from os.path import join, splitext
 
 from fastapi import FastAPI, UploadFile, File
 import iscc
@@ -7,7 +8,6 @@ from iscc_service.tools import code_to_bits, code_to_int
 from pydantic import BaseModel
 from iscc_cli.lib import iscc_from_file, iscc_from_url
 from iscc_cli import APP_DIR
-from iscc_cli.utils import safe_filename
 
 
 app = FastAPI()
@@ -116,8 +116,8 @@ def generate_iscc_url(url: str):
 @app.post("/generate/from_file", response_model=ISCC)
 def generate_iscc_file(file: UploadFile = File(...)):
     """Generate Full ISCC from Media File."""
-
-    fn = safe_filename(file.filename)
+    _, ext = splitext(file.filename)
+    fn = "{}{}".format(uuid.uuid4(), ext)
     tmp_path = join(APP_DIR, fn)
     with open(tmp_path, "wb") as outf:
         outf.write(file.file.read())
