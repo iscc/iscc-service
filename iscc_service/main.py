@@ -109,7 +109,7 @@ def data_instance_id(file: UploadFile = File(...)):
 @app.post("/generate/from_url", response_model=ISCC)
 def generate_iscc_url(url: str):
     """Generate Full ISCC from URL."""
-    r = iscc_from_url(url, guess=True)
+    r = iscc_from_url(url, guess=False)
     return r
 
 
@@ -121,6 +121,6 @@ def generate_iscc_file(file: UploadFile = File(...)):
     tmp_path = join(APP_DIR, fn)
     with open(tmp_path, "wb") as outf:
         outf.write(file.file.read())
-    r = iscc_from_file(tmp_path, guess=True)
+    r = iscc_from_file(tmp_path, guess=False)
     os.remove(tmp_path)
     return r
