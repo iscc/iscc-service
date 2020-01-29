@@ -2,6 +2,7 @@ import os
 import uuid
 from os.path import join, splitext
 
+import uvicorn
 from fastapi import FastAPI, UploadFile, File
 import iscc
 from iscc_service.tools import code_to_bits, code_to_int
@@ -135,3 +136,7 @@ def generate_iscc_file(file: UploadFile = File(...)):
     r = iscc_from_file(tmp_path, guess=False)
     os.remove(tmp_path)
     return r
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
