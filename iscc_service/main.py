@@ -50,64 +50,86 @@ class ISCC(BaseModel):
     bits: list = Field(None, description="Per component bitstrings")
 
 
+class IsccComponent(BaseModel):
+    code: str = Field(None, description="Single ISCC component", max_length=13)
+    bits: str = Field(None, description="Bitstring of component body", max_length=64)
+    ident: int = Field(
+        None, description="Integer representation of component body", le=2 ** 64
+    )
+
+
+class MetaID(IsccComponent):
+    title: str
+    title_trimmed: str
+    extra: str
+    extra_trimmed: str
+
+
+class ContentID(IsccComponent):
+    gmt: str = Field(
+        "text", description="Generic Media Type of Content-ID", max_length=64
+    )
+
+
+class DataID(IsccComponent):
+    pass
+
+
+class InstanceID(IsccComponent):
+    tophash: str = Field(
+        None, description="Hex-encoded 256-bit Top Hash", max_length=64
+    )
+
+
 @app.get("/")
 def root():
     response = RedirectResponse(url="/docs")
     return response
 
 
-@app.post("/generate/meta_id/")
+@app.post("/generate/meta_id/", response_model=MetaID)
 def meta_id(meta: Meta):
     """Generate MetaID from 'title' and 'creators'"""
     mid, title_trimmed, extra_trimmed = iscc.meta_id(meta.title, meta.extra)
     return {
-        "meta_id": {
-            "code": mid,
-            "bits": code_to_bits(mid),
-            "ident": code_to_int(mid),
-            "title": meta.title,
-            "title_trimmed": title_trimmed,
-            "extra": meta.extra,
-            "extra_trimmed": extra_trimmed,
-        }
+        "code": mid,
+        "bits": code_to_bits(mid),
+        "ident": code_to_int(mid),
+        "title": meta.title,
+        "title_trimmed": title_trimmed,
+        "extra": meta.extra,
+        "extra_trimmed": extra_trimmed,
     }
 
 
-@app.post("/generate/content_id_text")
+@app.post("/generate/content_id_text", response_model=ContentID)
 def content_id_text(text: Text):
     """Generate ContentID-Text from 'text'"""
     cid_t = iscc.content_id_text(text.text)
     return {
-        "content_id": {
-            "type": "text",
-            "bits": code_to_bits(cid_t),
-            "code": cid_t,
-            "ident": code_to_int(cid_t),
-            "text": text.text,
-        }
+        "gmt": "text",
+        "bits": code_to_bits(cid_t),
+        "code": cid_t,
+        "ident": code_to_int(cid_t),
     }
 
 
-@app.post("/generate/data_id")
+@app.post("/generate/data_id", response_model=DataID)
 def data_id(file: UploadFile = File(...)):
     """Generate DataID from raw binary data"""
     did = iscc.data_id(file.file)
-    return {
-        "data_id": {"code": did, "bits": code_to_bits(did), "ident": code_to_int(did),}
-    }
+    return {"code": did, "bits": code_to_bits(did), "ident": code_to_int(did)}
 
 
-@app.post("/generate/instance_id")
+@app.post("/generate/instance_id", response_model=InstanceID)
 def instance_id(file: UploadFile = File(...)):
     """Generate InstanceID from raw binary data"""
     iid, tophash = iscc.instance_id(file.file)
     return {
-        "instance_id": {
-            "code": iid,
-            "bits": code_to_bits(iid),
-            "ident": code_to_int(iid),
-            "tophash": tophash,
-        }
+        "code": iid,
+        "bits": code_to_bits(iid),
+        "ident": code_to_int(iid),
+        "tophash": tophash,
     }
 
 
