@@ -5,6 +5,8 @@ from os.path import join, splitext
 import uvicorn
 from fastapi import FastAPI, UploadFile, File
 import iscc
+from starlette.responses import RedirectResponse
+
 from iscc_service.tools import code_to_bits, code_to_int
 from pydantic import BaseModel, Field, HttpUrl
 from iscc_cli.lib import iscc_from_file, iscc_from_url
@@ -46,6 +48,12 @@ class ISCC(BaseModel):
     tophash: str = Field(None, description="Normalized Title")
     gmt: str = Field(None, description="Generic Media Type")
     bits: list = Field(None, description="Per component bitstrings")
+
+
+@app.get("/")
+def root():
+    response = RedirectResponse(url="/docs")
+    return response
 
 
 @app.post("/generate/meta_id/")
