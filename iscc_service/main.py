@@ -6,8 +6,9 @@ import uvicorn
 from fastapi import FastAPI, UploadFile, File
 import iscc
 from iscc_service.tools import code_to_bits, code_to_int
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, HttpUrl
 from iscc_cli.lib import iscc_from_file, iscc_from_url
+from iscc_cli.utils import iscc_split
 from iscc_cli import APP_DIR
 from starlette.middleware.cors import CORSMiddleware
 
@@ -26,23 +27,25 @@ app.add_middleware(
 
 
 class Meta(BaseModel):
-    title: str = ""
-    extra: str = ""
+    title: str = Field("", description="The title of an intangible creation.")
+    extra: str = Field(
+        "",
+        description="An optional short statement that distinguishes "
+        "this intangible creation from another one for the "
+        "purpose of forced Meta-ID uniqueness.",
+    )
 
 
 class Text(BaseModel):
-    text: str = ""
-
-
-class URL(BaseModel):
-    url: str
+    text: str = Field(None, description="Extracted full plain text for Content-ID.")
 
 
 class ISCC(BaseModel):
-    iscc: str
-    norm_title: str
-    tophash: str
-    gmt: str
+    iscc: str = Field(None, description="Full ISCC Code")
+    norm_title: str = Field(None, description="Normalized Title")
+    tophash: str = Field(None, description="Normalized Title")
+    gmt: str = Field(None, description="Generic Media Type")
+    bits: list = Field(None, description="Per component bitstrings")
 
 
 @app.post("/generate/meta_id/")
@@ -119,9 +122,11 @@ def data_instance_id(file: UploadFile = File(...)):
 
 
 @app.post("/generate/from_url", response_model=ISCC)
-def generate_iscc_url(url: str):
+def generate_iscc_url(url: HttpUrl):
     """Generate Full ISCC from URL."""
     r = iscc_from_url(url, guess=False)
+    components = iscc_split(r["iscc"])
+    r["bits"] = [code_to_bits(c) for c in components]
     return r
 
 
@@ -135,8 +140,10 @@ def generate_iscc_file(file: UploadFile = File(...)):
         outf.write(file.file.read())
     r = iscc_from_file(tmp_path, guess=False)
     os.remove(tmp_path)
+    components = iscc_split(r["iscc"])
+    r["bits"] = [code_to_bits(c) for c in components]
     return r
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run("iscc_service.main:app", host="127.0.0.1", port=8000, reload=True)
