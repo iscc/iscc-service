@@ -30,8 +30,8 @@ If you are using [poetry](https://python-poetry.org/):
 
 ```bash
 docker login
-docker build -t iscc-serice -f Dockerfile .
+docker build -t iscc-service -f Dockerfile .
 docker run --rm -p 8080:8080 -it iscc-service
-docker tag iscc-service username/iscc-service:0.1.0
-docker push username/iscc-service:0.1.0
+docker tag iscc-service username/iscc-service:0.1.1
+docker push username/iscc-service:0.1.1
 ```
