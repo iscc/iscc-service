@@ -9,7 +9,10 @@
 
 The Webservice is build with [FastAPI](https://github.com/tiangolo/fastapi) and makes
 use of the [ISCC reference implementation](<https://github.com/iscc/iscc-specs>) and
-the [ISCC Command Line Tool](https://github.com/iscc/iscc-cli)
+the [ISCC Command Line Tool](https://github.com/iscc/iscc-cli) and includes an
+interactive API documentation:
+
+![Interactive ISCC Api Docs](screenshot.jpg)
 
 
 The Docker image is published at https://hub.docker.com/r/titusz/iscc-service
