@@ -6,7 +6,7 @@ import uvicorn
 from fastapi import FastAPI, UploadFile, File
 import iscc
 from starlette.responses import RedirectResponse
-
+import iscc_service
 from iscc_service.tools import code_to_bits, code_to_int
 from pydantic import BaseModel, Field, HttpUrl
 from iscc_cli.lib import iscc_from_file, iscc_from_url
@@ -15,7 +15,7 @@ from iscc_cli import APP_DIR
 from starlette.middleware.cors import CORSMiddleware
 
 
-app = FastAPI()
+app = FastAPI(title="ISCC Web Service API", version=iscc_service.__version__,)
 
 ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", "*").split()
 
