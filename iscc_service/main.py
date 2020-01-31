@@ -81,15 +81,55 @@ class InstanceID(IsccComponent):
     )
 
 
-@app.get("/")
+@app.get("/", summary="Redirect to API Docs")
 def root():
+    """Redirects to API Documentation"""
     response = RedirectResponse(url="/docs")
     return response
 
 
-@app.post("/generate/meta_id/", response_model=MetaID)
+@app.post(
+    "/generate/from_file",
+    response_model=ISCC,
+    tags=["generate"],
+    summary="Generate ISCC from file",
+)
+def from_file(file: UploadFile = File(...)):
+    """Generate Full ISCC from Media File."""
+    _, ext = splitext(file.filename)
+    fn = "{}{}".format(uuid.uuid4(), ext)
+    tmp_path = join(APP_DIR, fn)
+    with open(tmp_path, "wb") as outf:
+        outf.write(file.file.read())
+    r = iscc_from_file(tmp_path, guess=False)
+    os.remove(tmp_path)
+    components = iscc_split(r["iscc"])
+    r["bits"] = [code_to_bits(c) for c in components]
+    return r
+
+
+@app.post(
+    "/generate/from_url",
+    response_model=ISCC,
+    tags=["generate"],
+    summary="Generate ISCC from URL",
+)
+def from_url(url: HttpUrl):
+    """Generate Full ISCC from URL."""
+    r = iscc_from_url(url, guess=False)
+    components = iscc_split(r["iscc"])
+    r["bits"] = [code_to_bits(c) for c in components]
+    return r
+
+
+@app.post(
+    "/generate/meta_id/",
+    response_model=MetaID,
+    tags=["generate"],
+    summary="Generate ISCC Meta-ID",
+)
 def meta_id(meta: Meta):
-    """Generate MetaID from 'title' and 'creators'"""
+    """Generate MetaID from 'title' and 'extra'"""
     mid, title_trimmed, extra_trimmed = iscc.meta_id(meta.title, meta.extra)
     return {
         "code": mid,
@@ -102,7 +142,12 @@ def meta_id(meta: Meta):
     }
 
 
-@app.post("/generate/content_id_text", response_model=ContentID)
+@app.post(
+    "/generate/content_id_text",
+    response_model=ContentID,
+    tags=["generate"],
+    summary="Generate ISCC Content-ID-Text",
+)
 def content_id_text(text: Text):
     """Generate ContentID-Text from 'text'"""
     cid_t = iscc.content_id_text(text.text)
@@ -114,16 +159,26 @@ def content_id_text(text: Text):
     }
 
 
-@app.post("/generate/data_id", response_model=DataID)
+@app.post(
+    "/generate/data_id",
+    response_model=DataID,
+    tags=["generate"],
+    summary="Generate ISCC Data-ID",
+)
 def data_id(file: UploadFile = File(...)):
-    """Generate DataID from raw binary data"""
+    """Generate Data-ID from raw binary data"""
     did = iscc.data_id(file.file)
     return {"code": did, "bits": code_to_bits(did), "ident": code_to_int(did)}
 
 
-@app.post("/generate/instance_id", response_model=InstanceID)
+@app.post(
+    "/generate/instance_id",
+    response_model=InstanceID,
+    tags=["generate"],
+    summary="Generate ISCC Instance-ID",
+)
 def instance_id(file: UploadFile = File(...)):
-    """Generate InstanceID from raw binary data"""
+    """Generate Instance-ID from raw binary data"""
     iid, tophash = iscc.instance_id(file.file)
     return {
         "code": iid,
@@ -133,9 +188,13 @@ def instance_id(file: UploadFile = File(...)):
     }
 
 
-@app.post("/generate/data_instance_id")
-def data_instance_id(file: UploadFile = File(...)):
-    """Generate DataID and InstanceID from raw binary data"""
+@app.post(
+    "/generate/data_instance_id",
+    tags=["generate"],
+    summary="Generate ISCC Data-ID and Instance-ID",
+)
+def data_and_instance_id(file: UploadFile = File(...)):
+    """Generate Data-ID and Instance-ID from raw binary data"""
 
     did = iscc.data_id(file.file)
     file.file.seek(0)
@@ -149,30 +208,6 @@ def data_instance_id(file: UploadFile = File(...)):
             "tophash": tophash,
         },
     }
-
-
-@app.post("/generate/from_url", response_model=ISCC)
-def generate_iscc_url(url: HttpUrl):
-    """Generate Full ISCC from URL."""
-    r = iscc_from_url(url, guess=False)
-    components = iscc_split(r["iscc"])
-    r["bits"] = [code_to_bits(c) for c in components]
-    return r
-
-
-@app.post("/generate/from_file", response_model=ISCC)
-def generate_iscc_file(file: UploadFile = File(...)):
-    """Generate Full ISCC from Media File."""
-    _, ext = splitext(file.filename)
-    fn = "{}{}".format(uuid.uuid4(), ext)
-    tmp_path = join(APP_DIR, fn)
-    with open(tmp_path, "wb") as outf:
-        outf.write(file.file.read())
-    r = iscc_from_file(tmp_path, guess=False)
-    os.remove(tmp_path)
-    components = iscc_split(r["iscc"])
-    r["bits"] = [code_to_bits(c) for c in components]
-    return r
 
 
 if __name__ == "__main__":
