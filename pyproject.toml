@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "iscc-service"
 version = "0.1.1"
-description = "ISCC Web Service API"+
+description = "ISCC Web Service API"
 license = "MIT"
 authors = ["Titusz Pan <tp@py7.de>"]
 readme = "README.md"
