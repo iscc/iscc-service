@@ -203,10 +203,12 @@ def from_file(
 )
 def from_url(url: HttpUrl):
     """Generate Full ISCC from URL."""
-    r = iscc_from_url(url, guess=False)
-    components = iscc_split(r["iscc"])
-    r["bits"] = [code_to_bits(c) for c in components]
-    return r
+    result = iscc_from_url(url, guess=True)
+    result["title"] = result.pop("norm_title")
+    result["title_trimmed"] = result["title"]
+    components = iscc_split(result["iscc"])
+    result["bits"] = [code_to_bits(c) for c in components]
+    return result
 
 
 @app.post(
