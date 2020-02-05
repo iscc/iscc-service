@@ -26,6 +26,9 @@ If you are using [poetry](https://python-poetry.org/):
 - Launch dev server with: 'uvicorn iscc_service.main:app --reload'
 - See API docs at: http://127.0.0.1:8000
 
+For the 'lookup' endpoint to work you must provide env variables for node connection.
+See [config.py](iscc_service/config.py)
+
 ## Publishing on Docker HUB:
 
 ```bash
