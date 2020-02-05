@@ -2,12 +2,16 @@ import os
 import shutil
 import uuid
 from os.path import join, splitext
+from typing import List
+
 import uvicorn
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 import iscc
 from tika import detector, parser
 from iscc_cli.const import SUPPORTED_MIME_TYPES, GMT
 import iscc_service
+from iscc_service.config import ALLOWED_ORIGINS, ISCC_STREAM
+from iscc_service.conn import get_client
 from iscc_service.models import (
     Metadata,
     Text,
@@ -16,16 +20,19 @@ from iscc_service.models import (
     ContentID,
     DataID,
     InstanceID,
+    StreamItem,
 )
-from iscc_service.tools import code_to_bits, code_to_int
+from iscc_service.tools import code_to_bits, code_to_int, stream_filter
 from pydantic import HttpUrl
 from iscc_cli.lib import iscc_from_url
-from iscc_cli.utils import iscc_split, get_title, mime_to_gmt
+from iscc_cli.utils import iscc_split, get_title, mime_to_gmt, iscc_verify
 from iscc_cli import APP_DIR, audio_id, video_id
 from starlette.middleware.cors import CORSMiddleware
 from starlette.status import (
     HTTP_415_UNSUPPORTED_MEDIA_TYPE,
     HTTP_422_UNPROCESSABLE_ENTITY,
+    HTTP_503_SERVICE_UNAVAILABLE,
+    HTTP_400_BAD_REQUEST,
 )
 
 
@@ -35,8 +42,6 @@ app = FastAPI(
     description="Microservice for creating ISCC Codes from Media Files.",
     docs_url="/",
 )
-
-ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", "*").split()
 
 app.add_middleware(
     CORSMiddleware,
@@ -235,6 +240,37 @@ def data_and_instance_id(file: UploadFile = File(...,)):
             "tophash": tophash,
         },
     }
+
+
+@app.get(
+    "/lookup",
+    response_model=List[StreamItem],
+    tags=["lookup"],
+    summary="Lookup ISCC Codes",
+)
+def lookup(iscc: str):
+    """Lookup an ISCC Code"""
+    client = get_client()
+    if client is None:
+        raise HTTPException(
+            HTTP_503_SERVICE_UNAVAILABLE, "ISCC lookup service not available"
+        )
+    try:
+        iscc_verify(iscc)
+    except ValueError as e:
+        raise HTTPException(HTTP_400_BAD_REQUEST, str(e))
+
+    components = iscc_split(iscc)
+    response = client.liststreamkeys(ISCC_STREAM, components, True, 100, 0, True)
+    result = stream_filter.search(response)
+    cleaned, seen = list(), set()
+    for entry in result:
+        if entry["txid"] not in seen:
+            keys = entry["keys"]
+            entry["bits"] = [code_to_bits(c) for c in keys]
+            cleaned.append(entry)
+            seen.add(entry["txid"])
+    return cleaned
 
 
 if __name__ == "__main__":

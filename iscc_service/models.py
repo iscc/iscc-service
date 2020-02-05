@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from typing import Optional, List
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, AnyUrl, HttpUrl
 
 
 def main():
@@ -86,3 +87,14 @@ class InstanceID(IsccComponent):
     tophash: str = Field(
         None, description="Hex-encoded 256-bit Top Hash", max_length=64
     )
+
+
+class StreamItem(BaseModel):
+    txid: str
+    vout: int
+    keys: List[str]
+    title: str
+    tophash: str
+    time: datetime
+    content_url: HttpUrl
+    bits: List[str]
