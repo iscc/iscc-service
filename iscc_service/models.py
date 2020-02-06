@@ -2,7 +2,7 @@
 from datetime import datetime
 from typing import Optional, List
 
-from pydantic import BaseModel, Field, AnyUrl, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl
 
 
 def main():
@@ -96,5 +96,5 @@ class StreamItem(BaseModel):
     title: str
     tophash: str
     time: datetime
-    content_url: HttpUrl
+    content_url: Optional[HttpUrl]
     bits: List[str]
