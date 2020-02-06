@@ -3,6 +3,13 @@ FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
 
 ARG POETRY_VERSION=1.0.0
 ENV GUNICORN_WORKERS=4
+ENV ALLOWED_ORIGINS="*"
+ENV ISCC_STREAM="iscc"
+ENV NODE_IP="127.0.0.1"
+ENV NODE_PORT="9718"
+ENV NODE_USER=""
+ENV NODE_PWD=""
+
 
 # libchromaprint-tools not needed, iscc-cli uses a locally downloaded (-> iscc init) version of fpcalc
 RUN apt-get update && apt-get install -y --no-install-recommends openjdk-11-jre-headless \
