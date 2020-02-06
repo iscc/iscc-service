@@ -2,7 +2,7 @@
 from datetime import datetime
 from typing import Optional, List
 
-from pydantic import BaseModel, Field, AnyUrl, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl
 
 
 def main():
