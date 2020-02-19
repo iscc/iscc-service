@@ -19,7 +19,7 @@ def code_to_int(code: str) -> int:
 
 
 stream_filter = jmespath.compile(
-    "[].last.{txid: txid, vout: vout, keys: keys, title: data.json.title, tophash:data.json.tophash, time: time, content_url: data.json.meta[0].data.encoding[0].contentUrl}"
+    "[].{txid: txid, vout: vout, keys: keys, title: data.json.title, tophash:data.json.tophash, time: time, content_url: data.json.meta[0].data.encoding[0].contentUrl}"
 )
 
 

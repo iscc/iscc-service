@@ -261,15 +261,22 @@ def lookup(iscc: str):
         raise HTTPException(HTTP_400_BAD_REQUEST, str(e))
 
     components = iscc_split(iscc)
-    response = client.liststreamkeys(ISCC_STREAM, components, True, 100, 0, True)
-    result = stream_filter.search(response)
-    cleaned, seen = list(), set()
+    results = []
+    seen = set()
+    for component in components:
+        response = client.liststreamkeyitems(ISCC_STREAM, component, True, 100, 0, True)
+        for result in response:
+            txid = result.get("txid")
+            if txid is None or txid in seen:
+                continue
+            results.append(result)
+            seen.add(txid)
+    result = stream_filter.search(results)
+    cleaned = []
     for entry in result:
-        if entry["txid"] not in seen:
-            keys = entry["keys"]
-            entry["bits"] = [code_to_bits(c) for c in keys]
-            cleaned.append(entry)
-            seen.add(entry["txid"])
+        keys = entry["keys"]
+        entry["bits"] = [code_to_bits(c) for c in keys]
+        cleaned.append(entry)
     return cleaned
 
 

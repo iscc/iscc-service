@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "iscc-service"
-version = "0.1.2"
+version = "0.1.7"
 description = "ISCC Web Service API"
 license = "MIT"
 authors = ["Titusz Pan <tp@py7.de>"]
@@ -27,14 +27,14 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.6"
-fastapi = "^0.47.1"
-iscc-cli = "^0.9.1"
-uvicorn = "^0.11.2"
-bitstring = "^3.1.6"
+fastapi = "^0.47"
+iscc-cli = "^0.9"
+uvicorn = "^0.11"
+bitstring = "^3.1"
 python-multipart = "^0.0.5"
 mcrpc = "^1.0.2"
-loguru = "^0.4.1"
-jmespath = "^0.9.4"
+loguru = "^0.4"
+jmespath = "^0.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.0"
