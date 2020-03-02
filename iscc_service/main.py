@@ -4,6 +4,7 @@ import uuid
 from os.path import join, splitext
 from typing import List
 
+import mobi
 import uvicorn
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 import iscc
@@ -72,8 +73,14 @@ def from_file(
             "https://github.com/iscc/iscc-service/issues.".format(media_type),
         )
 
-    file.file.seek(0)
-    tika_result = parser.from_buffer(file.file)
+    if media_type == "application/x-mobipocket-ebook":
+        file.file.seek(0)
+        tempdir, filepath = mobi.extract(file.file)
+        tika_result = parser.from_file(filepath)
+        shutil.rmtree(tempdir)
+    else:
+        file.file.seek(0)
+        tika_result = parser.from_buffer(file.file)
 
     if not title:
         title = get_title(tika_result, guess=True)
@@ -271,6 +278,10 @@ def lookup(iscc: str):
             cleaned.append(entry)
             seen.add(entry["txid"])
     return cleaned
+
+
+def run_server():
+    uvicorn.run("iscc_service.main:app", host="127.0.0.1", port=8000, reload=False)
 
 
 if __name__ == "__main__":
