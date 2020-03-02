@@ -1,5 +1,6 @@
 # iscc-service - ISCC Web Service API
-
+[![Version](https://img.shields.io/pypi/v/iscc-service.svg)](https://pypi.python.org/pypi/iscc-service/)
+[![Downloads](https://pepy.tech/badge/iscc-service)](https://pepy.tech/project/iscc-service)
 [![Pulls](https://shields.beevelop.com/docker/pulls/titusz/iscc-service.svg?style=flat-square)](https://hub.docker.com/r/titusz/iscc-service)
 
 > A REST OpenAPI Backend for creating [**ISCC codes**](https://iscc.codes) for digital media files.
@@ -51,6 +52,18 @@ INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 docker login
 docker build -t iscc-service -f Dockerfile .
 docker run --rm -p 8080:8080 -it iscc-service
-docker tag iscc-service username/iscc-service:0.1.1
-docker push username/iscc-service:0.1.1
+docker tag iscc-service username/iscc-service:0.1.8
+docker push username/iscc-service:0.1.8
 ```
+
+## Change Log
+
+### [0.1.8] - 2020-03.02
+
+- Add support for mobi files
+- Initial pypi release
+
+
+## License
+
+MIT © 2019-2020 Titusz Pan
