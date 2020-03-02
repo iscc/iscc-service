@@ -29,6 +29,22 @@ If you are using [poetry](https://python-poetry.org/):
 For the 'lookup' endpoint to work you must provide env variables for node connection.
 See [config.py](iscc_service/config.py)
 
+## Install via pip
+
+```bash
+$ pip3 install iscc-service
+```
+
+Run webservice via uvicorn
+
+```bash
+$ isccservice
+INFO:     Started server process [18800]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+```
+
 ## Publishing on Docker HUB:
 
 ```bash
