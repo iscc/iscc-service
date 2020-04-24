@@ -94,7 +94,8 @@ class StreamItem(BaseModel):
     vout: int
     keys: List[str]
     title: str
-    tophash: str
+    extra: Optional[str]
+    tophash: Optional[str]
     time: datetime
     content_url: Optional[HttpUrl]
     bits: List[str]
