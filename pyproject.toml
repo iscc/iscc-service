@@ -30,8 +30,8 @@ isccservice = 'iscc_service.main:run_server'
 
 [tool.poetry.dependencies]
 python = "^3.6"
-fastapi = {extras = ["all"], version = "^0.54.1"}
-iscc-cli = "^0.9.1"
+fastapi = "^0.54.1"
+iscc-cli = "^0.9.6"
 uvicorn = "^0.11.2"
 bitstring = "^3.1.6"
 python-multipart = "^0.0.5"
