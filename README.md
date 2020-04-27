@@ -52,8 +52,8 @@ INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 docker login
 docker build -t iscc-service -f Dockerfile .
 docker run --rm -p 8080:8080 -it iscc-service
-docker tag iscc-service username/iscc-service:0.1.8
-docker push username/iscc-service:0.1.8
+docker tag iscc-service username/iscc-service:0.1.9
+docker push username/iscc-service:0.1.9
 ```
 
 ## Change Log
