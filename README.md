@@ -58,7 +58,13 @@ docker push username/iscc-service:0.1.8
 
 ## Change Log
 
-### [0.1.8] - 2020-03.02
+### [0.1.9] - 2020-04-27
+
+- Support updated Content-ID Audio
+- Support incomplete ISCC codes
+- Updated dependencies
+
+### [0.1.8] - 2020-03-02
 
 - Add support for mobi files
 - Initial pypi release
