@@ -23,7 +23,12 @@ from iscc_service.models import (
     InstanceID,
     StreamItem,
 )
-from iscc_service.tools import code_to_bits, code_to_int, stream_filter
+from iscc_service.tools import (
+    code_to_bits,
+    code_to_int,
+    stream_filter,
+    add_placeholders,
+)
 from pydantic import HttpUrl
 from iscc_cli.lib import iscc_from_url
 from iscc_cli.utils import iscc_split, get_title, mime_to_gmt, iscc_verify
@@ -282,7 +287,11 @@ def lookup(iscc: str):
     cleaned = []
     for entry in result:
         keys = entry["keys"]
+        keys = add_placeholders(keys)
+
         entry["bits"] = [code_to_bits(c) for c in keys]
+        while len(entry["bits"]) < 4:
+            entry["bits"].append("0" * 64)
         cleaned.append(entry)
     return cleaned
 

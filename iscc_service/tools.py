@@ -23,6 +23,15 @@ stream_filter = jmespath.compile(
 )
 
 
+def add_placeholders(components):
+    """Add placeholders for missing DATA/INSTANCE components"""
+    headers = [s[:2] for s in components]
+    for prefix in ("CD", "CR"):
+        if prefix not in headers:
+            components.append(prefix + ("C" * 11))
+    return components
+
+
 if __name__ == "__main__":
     print(code_to_bits("CCDFPFc87MhdT"))
     print(code_to_int("CCDFPFc87MhdT"))
