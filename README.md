@@ -58,6 +58,9 @@ docker push username/iscc-service:0.1.9
 
 ## Change Log
 
+### [0.2.0] - 2020-05-01
+- Update to support flac and opus audio files
+
 ### [0.1.9] - 2020-04-27
 
 - Support updated Content-ID Audio
