@@ -30,14 +30,14 @@ isccservice = 'iscc_service.main:run_server'
 
 [tool.poetry.dependencies]
 python = "^3.6"
-fastapi = "^0.54.1"
-iscc-cli = "^0.9.7"
-uvicorn = "^0.11.2"
-bitstring = "^3.1.6"
+fastapi = "^0.54"
+iscc-cli = "^0.9"
+uvicorn = "^0.11"
+bitstring = "^3.1"
 python-multipart = "^0.0.5"
-mcrpc = "^1.0.2"
-loguru = "^0.4.1"
-jmespath = "^0.9.4"
+mcrpc = "^2.0"
+loguru = "^0.4"
+jmespath = "^0.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.0"
