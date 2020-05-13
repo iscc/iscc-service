@@ -287,6 +287,11 @@ def lookup(iscc: str):
     cleaned = []
     for entry in result:
         keys = entry["keys"]
+        # Better be conservative until we have a similarity based index.
+        # So for now we only match if at least two components are identical.
+        matches = set(keys).intersection(set(components))
+        if not len(matches) >= 2:
+            continue
         keys = add_placeholders(keys)
 
         entry["bits"] = [code_to_bits(c) for c in keys]
