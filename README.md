@@ -58,6 +58,9 @@ docker push username/iscc-service:0.1.9
 
 ## Change Log
 
+### [0.2.2] - 2020-06-12
+- Update to iscc-cli 0.9.11
+
 ### [0.2.1] - 2020-05-13
 - Update to iscc-cli 0.9.8
 - More conservative lookup matching
