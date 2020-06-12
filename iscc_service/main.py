@@ -8,7 +8,7 @@ import mobi
 import uvicorn
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 import iscc
-from tika import detector, parser
+from iscc_cli.tika import detector, parser
 from iscc_cli.const import SUPPORTED_MIME_TYPES, GMT
 import iscc_service
 from iscc_service.config import ALLOWED_ORIGINS, ISCC_STREAM
