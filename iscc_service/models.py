@@ -35,6 +35,7 @@ class ISCC(BaseModel):
     """Full ISCC Code including Metadata."""
 
     iscc: str = Field(..., description="Full ISCC Code")
+    iscc_raw: str = Field(..., description="Hex-encoded ISCC Code")
     title: str = Field(None, description="Title of intangible creation")
     title_trimmed: str = Field(None, description="Normalized and trimmed title")
     extra: str = Field(None, description="Optional extra metadata")

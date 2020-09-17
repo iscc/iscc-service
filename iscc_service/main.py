@@ -126,9 +126,11 @@ def from_file(
         iscc_code = "-".join((mid, cid, did, iid))
 
     components = iscc_split(iscc_code)
+    iscc_raw = "".join([iscc.decode(code).hex() for code in components])
 
     result = dict(
         iscc=iscc_code,
+        iscc_raw=iscc_raw,
         tophash=tophash,
         gmt=gmt,
         bits=[code_to_bits(c) for c in components],
