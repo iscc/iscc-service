@@ -2,11 +2,11 @@ import os
 import shutil
 import uuid
 from os.path import join, splitext
-from typing import List
-
+from typing import List, Optional
 import mobi
 import uvicorn
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+import uvarint
+from fastapi import FastAPI, Query, UploadFile, File, Form, HTTPException
 import iscc
 from iscc_cli.tika import detector, parser
 from iscc_cli.const import SUPPORTED_MIME_TYPES, GMT
@@ -14,7 +14,9 @@ import iscc_service
 from iscc_service.config import ALLOWED_ORIGINS, ISCC_STREAM
 from iscc_service.conn import get_client
 from iscc_service.models import (
+    Chain,
     Metadata,
+    ShortID,
     Text,
     ISCC,
     MetaID,
@@ -256,6 +258,25 @@ def data_and_instance_id(file: UploadFile = File(...,)):
     }
 
 
+@app.post(
+    "/generate/short_id",
+    response_model=ShortID,
+    tags=["generate"],
+    summary="Generate ISCC Short-ID",
+)
+def short_id(
+    chain: Chain, iscc_code: str, counter: Optional[int] = Query(0, ge=0, le=127)
+):
+    """Generate Short-ID from 'chain', 'iscc_code', and 'counter'"""
+    digest = b"".join(iscc.decode(c) for c in iscc_split(iscc_code))
+    cid = digest[10:13]
+    did = digest[20:22]
+    iid = digest[29:31]
+    sid = iscc.encode(chain.code + cid + did + iid + uvarint.encode(counter))
+
+    return dict(short_id=sid, chain=chain.name, counter=counter)
+
+
 @app.get(
     "/lookup",
     response_model=List[StreamItem],
@@ -304,8 +325,8 @@ def lookup(iscc: str):
 
 
 def run_server():
-    uvicorn.run("iscc_service.main:app", host="127.0.0.1", port=8000, reload=False)
+    uvicorn.run("iscc_service.main:app", host="127.0.0.1", port=8888, reload=False)
 
 
 if __name__ == "__main__":
-    uvicorn.run("iscc_service.main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("iscc_service.main:app", host="127.0.0.1", port=8888, reload=True)

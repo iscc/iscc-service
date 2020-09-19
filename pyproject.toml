@@ -38,6 +38,7 @@ python-multipart = "^0.0.5"
 mcrpc = "^2.0"
 loguru = "^0.4"
 jmespath = "^0.9"
+uvarint = "^1.2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.0"

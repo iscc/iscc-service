@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from enum import Enum
 from typing import Optional, List
 
 from pydantic import BaseModel, Field, HttpUrl
@@ -100,3 +101,24 @@ class StreamItem(BaseModel):
     time: datetime
     content_url: Optional[HttpUrl]
     bits: List[str]
+
+
+class Chain(str, Enum):
+    private = "private"
+    coblo = "coblo"
+    bloxberg = "bloxberg"
+
+    @property
+    def code(self):
+        chain_ids = {
+            "private": 0b0100_0000 .to_bytes(1, "big", signed=False),
+            "coblo": 0b0100_0001 .to_bytes(1, "big", signed=False),
+            "bloxberg": 0b0100_0010 .to_bytes(1, "big", signed=False),
+        }
+        return chain_ids[self.name]
+
+
+class ShortID(BaseModel):
+    short_id: str
+    chain: str
+    counter: int
