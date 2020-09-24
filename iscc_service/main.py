@@ -268,12 +268,11 @@ def short_id(
     chain: Chain, iscc_code: str, counter: Optional[int] = Query(0, ge=0, le=127)
 ):
     """Generate Short-ID from 'chain', 'iscc_code', and 'counter'"""
-    digest = b"".join(iscc.decode(c) for c in iscc_split(iscc_code))
-    cid = digest[10:13]
-    did = digest[20:22]
-    iid = digest[29:31]
-    sid = iscc.encode(chain.code + cid + did + iid + uvarint.encode(counter))
-
+    components = iscc_split(iscc_code)
+    # First 7 bytes (including header) of all but Instance-ID
+    digests = [iscc.decode(c)[:7] for c in components if not c.startswith("CR")]
+    iscc_id_body = iscc.similarity_hash(digests)
+    sid = iscc.encode(chain.code + iscc_id_body + uvarint.encode(counter))
     return dict(short_id=sid, chain=chain.name, counter=counter)
 
 
