@@ -161,6 +161,7 @@ def from_url(url: HttpUrl):
     result["title_trimmed"] = result["title"]
     components = iscc_split(result["iscc"])
     result["bits"] = [code_to_bits(c) for c in components]
+    result["iscc_raw"] = "".join([iscc.decode(code).hex() for code in components])
     return result
 
 
