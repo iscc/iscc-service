@@ -90,7 +90,7 @@ def from_file(
         tika_result = parser.from_buffer(file.file)
 
     if not title:
-        title = get_title(tika_result, guess=True)
+        title = get_title(tika_result, guess=True, uri=file.filename)
 
     mid, norm_title, norm_extra = iscc.meta_id(title, extra)
     gmt = mime_to_gmt(media_type)

@@ -61,6 +61,7 @@ docker push username/iscc-service:0.1.9
 ### [0.2.4] - unreleased
 - Add hexadecimal output for iscc
 - Add new /generate/short_id entpoint
+- Create meta-id from filename as fallback
 
 ### [0.2.3] - 2020-06-12
 - Use vendorized tika
