@@ -1,0 +1,13 @@
+{
+  email tp@iscc.foundation
+}
+
+api.iscc.in {
+  header Strict-Transport-Security max-age=31536000;
+  header -Server
+  reverse_proxy iscc-service:8080
+  encode gzip
+  log {
+      output stdout
+  }
+}
