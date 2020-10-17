@@ -107,6 +107,7 @@ class Chain(str, Enum):
     private = "private"
     coblo = "coblo"
     bloxberg = "bloxberg"
+    tidal = "tidal"
 
     @property
     def code(self):
@@ -114,11 +115,12 @@ class Chain(str, Enum):
             "private": 0b0100_0000 .to_bytes(1, "big", signed=False),
             "coblo": 0b0100_0001 .to_bytes(1, "big", signed=False),
             "bloxberg": 0b0100_0010 .to_bytes(1, "big", signed=False),
+            "tidal": 0b0100_0011 .to_bytes(1, "big", signed=False),
         }
         return chain_ids[self.name]
 
 
 class ShortID(BaseModel):
     short_id: str
-    chain: str
+    chain: Chain
     counter: int
