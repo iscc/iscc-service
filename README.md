@@ -59,8 +59,9 @@ docker push username/iscc-service:0.1.9
 ## Change Log
 
 ### [0.2.4] - unreleased
-- Add iscc_raw field for with hex encoded iscc-code
+- Add `iscc_raw` field for with hex encoded iscc-code
 - Add new /generate/short_id entpoint
+- Add provisional granular `fingerprint` field for audio iscc-codes
 - Create meta-id from filename as fallback
 - Update to FastAPI 0.61
 

@@ -45,6 +45,7 @@ class ISCC(BaseModel):
     )
     tophash: str = Field(..., description="Normalized Title")
     gmt: str = Field(..., description="Generic Media Type")
+    fingerprint: List[int] = Field(None, description="Granular Content Fingerprint")
     bits: List[str] = Field(..., description="Per component bitstrings")
 
 

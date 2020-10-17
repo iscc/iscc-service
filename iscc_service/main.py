@@ -94,6 +94,7 @@ def from_file(
 
     mid, norm_title, norm_extra = iscc.meta_id(title, extra)
     gmt = mime_to_gmt(media_type)
+    audio_fingerprint = None
     if gmt == GMT.IMAGE:
         file.file.seek(0)
         cid = iscc.content_id_image(file.file)
@@ -104,8 +105,8 @@ def from_file(
         cid = iscc.content_id_text(tika_result["content"])
     elif gmt == GMT.AUDIO:
         file.file.seek(0)
-        features = audio_id.get_chroma_vector(file.file)
-        cid = audio_id.content_id_audio(features)
+        audio_fingerprint = audio_id.get_chroma_vector(file.file)
+        cid = audio_id.content_id_audio(audio_fingerprint)
     elif gmt == GMT.VIDEO:
         file.file.seek(0)
         _, ext = splitext(file.filename)
@@ -143,6 +144,8 @@ def from_file(
     if norm_extra:
         result["extra"] = extra
         result["extra_trimmed"] = norm_extra
+    if audio_fingerprint:
+        result["fingerprint"] = audio_fingerprint
 
     file.file.close()
     return result
