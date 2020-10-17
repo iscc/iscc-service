@@ -25,7 +25,7 @@ If you are using [poetry](https://python-poetry.org/):
 
 - After checkout cd into code directory and run 'poetry install' to install dependencies.
 - Launch dev server with: 'uvicorn iscc_service.main:app --reload'
-- See API docs at: http://127.0.0.1:8000
+- See API docs at: http://127.0.0.1:8080
 
 For the 'lookup' endpoint to work you must provide env variables for node connection.
 See [config.py](iscc_service/config.py)
@@ -39,11 +39,11 @@ $ pip3 install iscc-service
 Run webservice via uvicorn
 
 ```bash
-$ isccservice
+$ iscc-service
 INFO:     Started server process [18800]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Uvicorn running on http://127.0.0.1:8080 (Press CTRL+C to quit)
 ```
 
 ## Publishing on Docker HUB:
@@ -59,9 +59,10 @@ docker push username/iscc-service:0.1.9
 ## Change Log
 
 ### [0.2.4] - unreleased
-- Add hexadecimal output for iscc
+- Add iscc_raw field for with hex encoded iscc-code
 - Add new /generate/short_id entpoint
 - Create meta-id from filename as fallback
+- Update to FastAPI 0.61
 
 ### [0.2.3] - 2020-06-12
 - Use vendorized tika
