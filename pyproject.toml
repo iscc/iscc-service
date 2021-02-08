@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "iscc-service"
-version = "0.2.4"
+version = "1.1.0-alpha.0"
 description = "ISCC Web Service API"
 license = "MIT"
 authors = ["Titusz Pan <tp@py7.de>"]
@@ -30,20 +30,18 @@ iscc-service = 'iscc_service.main:run_server'
 
 [tool.poetry.dependencies]
 python = "^3.6"
-fastapi = "^0.61"
-iscc-cli = "^0.9"
-uvicorn = "^0.12"
-bitstring = "^3.1"
+fastapi = "^0.63"
+iscc = {version = "^1.1.0a0", allow-prereleases = true}
+uvicorn = "^0.13"
 python-multipart = "^0.0.5"
 mcrpc = "^2.0"
-loguru = "^0.4"
-jmespath = "^0.9"
+jmespath = "^0.10"
 uvarint = "^1.2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.0"
-black = "^19.10b0"
+black = {version = "19.10b0", allow-prereleases = true}
 
 [build-system]
-requires = ["poetry==1.0.0"]
+requires = ["poetry>=1.0.0"]
 build-backend = "poetry.masonry.api"
