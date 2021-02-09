@@ -50,6 +50,12 @@ def from_file(
     return result
 
 
+@app.get("/status/config", response_model=iscc.Opts, tags=["status"])
+def config():
+    """Return current ISCC-Service Configuration"""
+    return iscc.Opts()
+
+
 def run_server():
     uvicorn.run("iscc_service.main:app", host="127.0.0.1", port=8080, reload=False)
 

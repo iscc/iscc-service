@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "iscc-service"
-version = "1.1.0-alpha.0"
+version = "1.1.0-alpha.1"
 description = "ISCC Web Service API"
 license = "MIT"
 authors = ["Titusz Pan <tp@py7.de>"]
