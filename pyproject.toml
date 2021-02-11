@@ -37,6 +37,8 @@ python-multipart = "^0.0.5"
 mcrpc = "^2.0"
 jmespath = "^0.10"
 uvarint = "^1.2.0"
+aiofiles = "^0.6.0"
+asynctempfile = "^0.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.0"
