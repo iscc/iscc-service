@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "iscc-service"
-version = "1.1.0-alpha.1"
+version = "1.1.0a4"
 description = "ISCC Web Service API"
 license = "MIT"
 authors = ["Titusz Pan <tp@py7.de>"]
@@ -34,9 +34,6 @@ fastapi = "^0.63"
 iscc = {version = "^1.1.0a0", allow-prereleases = true}
 uvicorn = "^0.13"
 python-multipart = "^0.0.5"
-mcrpc = "^2.0"
-jmespath = "^0.10"
-uvarint = "^1.2.0"
 aiofiles = "^0.6.0"
 asynctempfile = "^0.5.0"
 
