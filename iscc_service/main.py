@@ -70,12 +70,12 @@ async def code_iscc(
     try:
         os.remove(tmp_file_path)
     except Exception:
-        log.warning(f'could not remove {tmp_file_path}')
+        log.warning(f"could not remove {tmp_file_path}")
 
     try:
         os.rmdir(tmp_dir)
     except Exception:
-        log.warning(f'could not remove {tmp_dir}')
+        log.warning(f"could not remove {tmp_dir}")
 
     return result
 
