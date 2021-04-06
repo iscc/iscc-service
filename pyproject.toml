@@ -27,6 +27,7 @@ classifiers = [
 
 [tool.poetry.scripts]
 iscc-service = 'iscc_service.main:run_server'
+iscc-service-init = 'iscc_service.init:init'
 
 [tool.poetry.dependencies]
 python = "^3.6.1"

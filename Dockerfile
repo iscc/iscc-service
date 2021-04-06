@@ -1,7 +1,7 @@
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
 # Is based on python:3.7 which is python:3.7.x-buster -> Debian Buster
 
-ARG POETRY_VERSION=1.1.4
+ARG POETRY_VERSION=1.1.5
 ENV GUNICORN_WORKERS=1
 ENV ALLOWED_ORIGINS="*"
 
@@ -13,12 +13,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends openjdk-11-jre-
  && rm -rf /var/lib/apt/lists/*
 
 COPY poetry.lock pyproject.toml /app/
+COPY iscc_service /app/iscc_service
 
 RUN poetry config virtualenvs.create false \
- && poetry install --no-dev --no-ansi --no-interaction
-
-
-COPY iscc_service /app/iscc_service
+ && poetry install --no-dev --no-ansi --no-interaction \
+ && python -m iscc_service.init
 
 EXPOSE 8080
 
