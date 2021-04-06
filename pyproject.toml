@@ -36,6 +36,7 @@ iscc = {version = "^1.1.0b0", allow-prereleases = true, extras=["turbo"]}
 uvicorn = "^0.13"
 python-multipart = "^0.0.5"
 aiofiles = "^0.6.0"
+appdirs = "^1.4.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.0"

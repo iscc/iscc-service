@@ -14,8 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends openjdk-11-jre-
 
 COPY poetry.lock pyproject.toml /app/
 
-RUN poetry config virtualenvs.create false \
- && poetry install --no-dev --no-ansi --no-interaction \
+RUN poetry install --no-dev --no-ansi --no-interaction \
  && poetry run iscc-service-init
 
 COPY iscc_service /app/iscc_service
