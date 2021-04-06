@@ -1,7 +1,7 @@
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
 # Is based on python:3.7 which is python:3.7.x-buster -> Debian Buster
 
-ARG POETRY_VERSION=1.0.0
+ARG POETRY_VERSION=1.1.5
 ENV GUNICORN_WORKERS=1
 ENV ALLOWED_ORIGINS="*"
 
