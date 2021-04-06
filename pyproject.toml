@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "iscc-service"
-version = "1.1.0a5"
+version = "1.1.0-beta.2"
 description = "ISCC Web Service API"
 license = "MIT"
 authors = ["Titusz Pan <tp@py7.de>"]
@@ -29,9 +29,9 @@ classifiers = [
 iscc-service = 'iscc_service.main:run_server'
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.6.1"
 fastapi = "^0.63"
-iscc = {version = "^1.1.0a0", allow-prereleases = true}
+iscc = {version = "^1.1.0b0", allow-prereleases = true, extras=["turbo"]}
 uvicorn = "^0.13"
 python-multipart = "^0.0.5"
 aiofiles = "^0.6.0"

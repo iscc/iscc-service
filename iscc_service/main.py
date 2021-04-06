@@ -65,18 +65,7 @@ async def code_iscc(
         result = await loop.run_in_executor(
             app.state.executor, iscclib.code_iscc, tmp_file_path, title, extra
         )
-        try:
-            app.state.nns.add(result["iscc"])
-        except Exception:
-            pass
-
         return result
-
-
-@app.get("/nearest/{iscc}", tags=["match"])
-async def nearest(iscc: str):
-    """Find nearest neighbors for an ISCC."""
-    return app.state.nns.query(iscc)
 
 
 @app.get("/explain/{iscc}", tags=["tools"])
@@ -102,34 +91,10 @@ async def explain(iscc: str):
     )
 
 
-@app.get(
-    "/configuration",
-    response_model=iscclib.Options,
-    summary="Show ISCC Service configuration",
-    tags=["config"],
-)
-def get_config():
-    """Return current ISCC-Service Configuration"""
-    return app.state.options
-
-
-@app.post(
-    "/configuration",
-    response_model=iscclib.Options,
-    summary="Update active ISCC-Service Configuration",
-    tags=["config"],
-)
-def set_config(options: iscclib.Options):
-    """Update Configuration"""
-    app.state.options = iscclib.Options(**options.dict())
-    return app.state.options
-
-
 @app.on_event("startup")
 async def on_startup():
     app.state.options = iscclib.Options()
     app.state.executor = ProcessPoolExecutor()
-    app.state.nns = iscclib.SimpleIndex()
 
 
 @app.on_event("shutdown")
