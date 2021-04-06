@@ -17,7 +17,7 @@ COPY iscc_service /app/iscc_service
 
 RUN poetry config virtualenvs.create false \
  && poetry install --no-dev --no-ansi --no-interaction \
- && python -m iscc_service.init
+ && iscc-service-init
 
 EXPOSE 8080
 
