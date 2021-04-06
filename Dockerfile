@@ -16,7 +16,7 @@ COPY poetry.lock pyproject.toml /app/
 
 RUN poetry config virtualenvs.create false \
  && poetry install --no-dev --no-ansi --no-interaction \
- && iscc-service-init
+ && poetry run iscc-service-init
 
 COPY iscc_service /app/iscc_service
 
