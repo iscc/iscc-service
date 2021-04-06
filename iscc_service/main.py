@@ -106,6 +106,7 @@ async def explain(iscc: str):
 @app.on_event("startup")
 async def on_startup():
     from iscc_service import init
+
     init.init()
     app.state.options = iscclib.Options()
     app.state.executor = ProcessPoolExecutor()
