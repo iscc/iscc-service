@@ -13,11 +13,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends openjdk-11-jre-
  && rm -rf /var/lib/apt/lists/*
 
 COPY poetry.lock pyproject.toml /app/
-COPY iscc_service /app/iscc_service
 
 RUN poetry config virtualenvs.create false \
- && poetry install --no-dev --no-ansi --no-interaction \
- && python3 -m iscc_service.init
+ && poetry install --no-dev --no-ansi --no-interaction
+
+COPY iscc_service /app/iscc_service
 
 EXPOSE 8080
 
