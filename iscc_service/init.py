@@ -20,5 +20,5 @@ def init():
     log.info("fpcalc initialized: {}".format(fpc_version))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
