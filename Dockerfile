@@ -16,5 +16,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends openjdk-11-jre-
 
 COPY poetry.lock pyproject.toml /app/
 RUN poetry install --no-root --no-dev -vvv
-
 COPY iscc_service /app/iscc_service
+RUN python -m iscc_service.init
