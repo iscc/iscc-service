@@ -1,24 +1,20 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
-# Is based on python:3.7 which is python:3.7.x-buster -> Debian Buster
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
 
-ARG POETRY_VERSION=1.1.5
-ENV GUNICORN_WORKERS=1
-ENV ALLOWED_ORIGINS="*"
+ENV ISCC_SERVICE_ALLOWED_ORIGINS="*"
+ENV MODULE_NAME=iscc_service.main
+ENV PORT=8080
+ENV LOG_LEVEL=info
+ENV TIMEOUT=3600
 
-
-# libchromaprint-tools not needed, iscc-cli uses a locally downloaded (-> iscc init) version of fpcalc
-RUN apt-get update && apt-get install -y --no-install-recommends openjdk-11-jre-headless \
- && pip install --upgrade pip \
- && pip install "poetry==$POETRY_VERSION" \
- && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends openjdk-11-jre-headless curl && \
+    pip install --upgrade pip && \
+    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
+    cd /usr/local/bin && \
+    ln -s /opt/poetry/bin/poetry && \
+    poetry config virtualenvs.create false && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY poetry.lock pyproject.toml /app/
-
-RUN poetry config virtualenvs.create false \
- && poetry install --no-dev --no-ansi --no-interaction
+RUN poetry install --no-root --no-dev -vvv
 
 COPY iscc_service /app/iscc_service
-
-EXPOSE 8080
-
-CMD exec gunicorn iscc_service.main:app -b 0.0.0.0:8080 -w ${GUNICORN_WORKERS} -k uvicorn.workers.UvicornWorker
