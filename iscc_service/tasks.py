@@ -4,7 +4,7 @@ import json
 from os.path import join, basename
 from typing import Optional
 from codetiming import Timer
-from models import URLRequest
+from iscc_service.models import URLRequest
 import iscc
 from iscc.utils import download_file
 from blake3 import blake3
