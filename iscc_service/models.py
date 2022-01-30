@@ -28,6 +28,19 @@ class Metadata(BaseModel):
     )
 
 
+class URLRequest(BaseModel):
+
+    url: HttpUrl = Field(description="URL to a media file to create an ISCC for.")
+    title: Optional[str] = Field(
+        description="The title of an intangible creation.", min_length=1
+    )
+    extra: Optional[str] = Field(
+        description="An optional short statement that distinguishes "
+        "this intangible creation from another one for the "
+        "purpose of forced Meta-ID uniqueness.",
+    )
+
+
 class Text(BaseModel):
     text: str = Field(None, description="Extracted full plain text for Content-ID.")
 

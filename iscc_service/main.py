@@ -1,12 +1,14 @@
 import asyncio
 import os
+import tempfile
 from concurrent.futures.process import ProcessPoolExecutor
+from os.path import join
 from secrets import token_hex
 from pathlib import Path
 from tempfile import mkdtemp
 from loguru import logger as log
 import uvicorn
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form, BackgroundTasks
 import iscc as ilib
 from starlette.status import HTTP_415_UNSUPPORTED_MEDIA_TYPE
 import iscc_service
@@ -17,6 +19,9 @@ import aiofiles
 from iscc.schema import ISCC
 from iscc_core.codec import Code
 from iscc.wrappers import decompose
+from iscc_service.models import URLRequest
+from iscc_service.tasks import TaskResult, process_url, load_task
+
 
 app = FastAPI(
     title="ISCC Web Service API",
@@ -82,6 +87,45 @@ async def code_iscc(
         log.warning(f"could not remove {tmp_dir}")
 
     return result
+
+
+@app.post(
+    "/from_url",
+    summary="Generate ISCC from URL",
+    response_model=TaskResult,
+    response_model_exclude_unset=True,
+    tags=["generate"],
+)
+async def from_url(request: URLRequest, background_tasks: BackgroundTasks):
+    """Generate Full ISCC from URL"""
+    status = TaskResult(**request.dict(exclude_unset=True))
+    status.set_task_id()
+    status.save()
+    background_tasks.add_task(process_url, status)
+    return status
+
+
+@app.get(
+    "/task/{task_id}",
+    summary="Get status/result from URL processing",
+    response_model=TaskResult,
+    response_model_exclude_unset=True,
+    response_model_exclude_none=True,
+    tags=["generate"],
+)
+async def get_task(task_id):
+    status = load_task(task_id)
+
+    # Cleanup finished tasks
+    if status.status in ("failed", "success"):
+        tmp_file_path = join(tempfile.gettempdir(), status.filename)
+        try:
+            os.remove(tmp_file_path)
+            log.info(f"removed {status.filename}")
+        except Exception:
+            log.warning(f"could not remove {tmp_file_path}")
+
+    return status
 
 
 @app.get("/explain/{iscc}", tags=["tools"])
