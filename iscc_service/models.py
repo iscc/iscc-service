@@ -55,7 +55,7 @@ class IsccComponent(BaseModel):
     code: str = Field(..., description="Single ISCC component", max_length=13)
     bits: str = Field(..., description="Bitstring of component body", max_length=64)
     ident: int = Field(
-        ..., description="Integer representation of component body", le=2 ** 64
+        ..., description="Integer representation of component body", le=2**64
     )
 
 
@@ -113,10 +113,10 @@ class Chain(str, Enum):
     @property
     def code(self):
         chain_ids = {
-            "private": 0b0100_0000 .to_bytes(1, "big", signed=False),
-            "coblo": 0b0100_0001 .to_bytes(1, "big", signed=False),
-            "bloxberg": 0b0100_0010 .to_bytes(1, "big", signed=False),
-            "tidal": 0b0100_0011 .to_bytes(1, "big", signed=False),
+            "private": 0b0100_0000.to_bytes(1, "big", signed=False),
+            "coblo": 0b0100_0001.to_bytes(1, "big", signed=False),
+            "bloxberg": 0b0100_0010.to_bytes(1, "big", signed=False),
+            "tidal": 0b0100_0011.to_bytes(1, "big", signed=False),
         }
         return chain_ids[self.name]
 

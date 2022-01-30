@@ -7,7 +7,7 @@ from tempfile import mkdtemp
 from loguru import logger as log
 import uvicorn
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
-import iscc as iscclib
+import iscc as ilib
 from starlette.status import HTTP_415_UNSUPPORTED_MEDIA_TYPE
 import iscc_service
 from iscc_service.config import ALLOWED_ORIGINS
@@ -15,6 +15,8 @@ from starlette.middleware.cors import CORSMiddleware
 from iscc_service.utils import secure_filename
 import aiofiles
 from iscc.schema import ISCC
+from iscc_core.codec import Code
+from iscc.wrappers import decompose
 
 app = FastAPI(
     title="ISCC Web Service API",
@@ -40,7 +42,9 @@ app.add_middleware(
     tags=["generate"],
 )
 async def code_iscc(
-    file: UploadFile = File(...), title: str = Form(""), extra: str = Form(""),
+    file: UploadFile = File(...),
+    title: str = Form(""),
+    extra: str = Form(""),
 ):
     """Generate Full ISCC Code from Media File with optional explicit metadata."""
 
@@ -52,8 +56,8 @@ async def code_iscc(
         await file.seek(0)
         data = await file.read(4096)
         # Exit early on unsupported mediatype
-        mediatype = iscclib.mime_guess(data, filename)
-        if not iscclib.mime_supported(mediatype):
+        mediatype = ilib.mediatype.mime_guess(data, filename)
+        if not ilib.mediatype.mime_supported(mediatype):
             raise HTTPException(
                 HTTP_415_UNSUPPORTED_MEDIA_TYPE,
                 "Unsupported media type '{}'. Please request support at "
@@ -64,7 +68,7 @@ async def code_iscc(
             data = await file.read(1024 * 1024)
     loop = asyncio.get_event_loop()
     result = await loop.run_in_executor(
-        app.state.executor, iscclib.code_iscc, tmp_file_path, title, extra
+        app.state.executor, ilib.code_iscc, tmp_file_path, title, extra
     )
 
     try:
@@ -83,8 +87,8 @@ async def code_iscc(
 @app.get("/explain/{iscc}", tags=["tools"])
 async def explain(iscc: str):
     """Explain details of an ISCC code"""
-    code_obj = iscclib.Code(iscc)
-    code_objs = iscclib.decompose(code_obj)
+    code_obj = Code(iscc)
+    code_objs = decompose(code_obj)
     decomposed = "-".join(c.code for c in code_objs)
     components = {
         c.code: {
@@ -106,9 +110,10 @@ async def explain(iscc: str):
 @app.on_event("startup")
 async def on_startup():
     from iscc_service import init
+    from iscc.options import sdk_opts
 
     init.init()
-    app.state.options = iscclib.Options()
+    app.state.options = sdk_opts
     app.state.executor = ProcessPoolExecutor()
 
 
@@ -122,4 +127,4 @@ def run_server():
 
 
 if __name__ == "__main__":
-    uvicorn.run("iscc_service.main:app", host="127.0.0.1", port=8080, reload=True)
+    uvicorn.run("iscc_service.main:app", host="127.0.0.1", port=8888, reload=True)

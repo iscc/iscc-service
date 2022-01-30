@@ -7,7 +7,7 @@ client = TestClient(app)
 
 
 def test_version():
-    assert __version__ == "1.1.0a5"
+    assert __version__ == "1.1.0b15"
 
 
 def test_read_main():
