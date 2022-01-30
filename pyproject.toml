@@ -32,7 +32,7 @@ iscc-service-init = 'iscc_service.init:init'
 [tool.poetry.dependencies]
 python = ">=3.7,<3.10"
 fastapi = "^0.73"
-iscc = {version = "^1.1.0b15", allow-prereleases = true, extras=["turbo"]}
+iscc = {version = "^1.1.0b15", allow-prereleases = true, extras=["turbo", "optional"]}
 uvicorn = "^0.17"
 python-multipart = "^0.0.5"
 aiofiles = "^0.8.0"

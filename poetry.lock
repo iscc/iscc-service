@@ -133,7 +133,7 @@ python-versions = "*"
 
 [[package]]
 name = "charset-normalizer"
-version = "2.0.10"
+version = "2.0.11"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
 category = "main"
 optional = false
@@ -272,11 +272,13 @@ lmdb = ">=1.2.1,<2.0.0"
 mobi = ">=0.3,<0.4"
 msgpack = ">=1.0,<2.0"
 numpy = "1.19.3"
+opencv-contrib-python-headless = {version = ">=4.5,<5.0", optional = true, markers = "extra == \"optional\""}
 Pillow = ">=8.4,<9.0"
 python-exiv2 = ">=0.8.3,<0.9.0"
 python-magic = {version = ">=0.4.22,<0.5.0", markers = "sys_platform == \"linux\""}
 python-magic-bin = {version = ">=0.4.14,<0.5.0", markers = "sys_platform == \"win32\" or sys_platform == \"darwin\""}
 requests = ">=2.26,<3.0"
+scenedetect = {version = ">=0.5.5,<0.6.0", optional = true, markers = "extra == \"optional\""}
 tinytag = ">=1.6,<2.0"
 
 [package.extras]
@@ -397,6 +399,32 @@ description = "NumPy is the fundamental package for array computing with Python.
 category = "main"
 optional = false
 python-versions = ">=3.6"
+
+[[package]]
+name = "opencv-contrib-python-headless"
+version = "4.5.2.54"
+description = "Wrapper package for OpenCV python bindings."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+numpy = ">=1.13.3"
+
+[[package]]
+name = "opencv-contrib-python-headless"
+version = "4.5.5.62"
+description = "Wrapper package for OpenCV python bindings."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+numpy = [
+    {version = ">=1.19.3", markers = "python_version >= \"3.6\" and platform_system == \"Linux\" and platform_machine == \"aarch64\" or python_version >= \"3.9\""},
+    {version = ">=1.14.5", markers = "python_version >= \"3.7\""},
+    {version = ">=1.17.3", markers = "python_version >= \"3.8\""},
+]
 
 [[package]]
 name = "packaging"
@@ -574,6 +602,23 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 use_chardet_on_py3 = ["chardet (>=3.0.2,<5)"]
 
 [[package]]
+name = "scenedetect"
+version = "0.5.6.1"
+description = "A cross-platform, OpenCV-based video scene detection program and Python library."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Click = "*"
+numpy = "*"
+tqdm = "*"
+
+[package.extras]
+opencv-headless = ["opencv-python-headless (<=4.2.0.32)", "opencv-python-headless"]
+opencv = ["opencv-python (<=4.2.0.32)", "opencv-python"]
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -622,6 +667,22 @@ description = "A lil' TOML parser"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
+
+[[package]]
+name = "tqdm"
+version = "4.62.3"
+description = "Fast, Extensible Progress Meter"
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[package.extras]
+dev = ["py-make (>=0.1.0)", "twine", "wheel"]
+notebook = ["ipywidgets (>=6)"]
+telegram = ["requests"]
 
 [[package]]
 name = "typed-ast"
@@ -719,7 +780,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7,<3.10"
-content-hash = "fa21f30877554c14afd4d26b32ca63749c712698177e69808e83a4e5ca025741"
+content-hash = "86439dac740492999ecf2a894145e94619fcfffe032262f176997fe7fa6d9958"
 
 [metadata.files]
 aiofiles = [
@@ -852,8 +913,8 @@ certifi = [
     {file = "certifi-2021.10.8.tar.gz", hash = "sha256:78884e7c1d4b00ce3cea67b44566851c4343c120abd683433ce934a68ea58872"},
 ]
 charset-normalizer = [
-    {file = "charset-normalizer-2.0.10.tar.gz", hash = "sha256:876d180e9d7432c5d1dfd4c5d26b72f099d503e8fcc0feb7532c9289be60fcbd"},
-    {file = "charset_normalizer-2.0.10-py3-none-any.whl", hash = "sha256:cb957888737fc0bbcd78e3df769addb41fd1ff8cf950dc9e7ad7793f1bf44455"},
+    {file = "charset-normalizer-2.0.11.tar.gz", hash = "sha256:98398a9d69ee80548c762ba991a4728bfc3836768ed226b3945908d1a688371c"},
+    {file = "charset_normalizer-2.0.11-py3-none-any.whl", hash = "sha256:2842d8f5e82a1f6aa437380934d5e1cd4fcf2003b06fed6940769c164a480a45"},
 ]
 click = [
     {file = "click-8.0.3-py3-none-any.whl", hash = "sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3"},
@@ -1024,6 +1085,35 @@ numpy = [
     {file = "numpy-1.19.3-pp36-pypy36_pp73-manylinux2010_x86_64.whl", hash = "sha256:9a0669787ba8c9d3bb5de5d9429208882fb47764aa79123af25c5edc4f5966b9"},
     {file = "numpy-1.19.3.zip", hash = "sha256:35bf5316af8dc7c7db1ad45bec603e5fb28671beb98ebd1d65e8059efcfd3b72"},
 ]
+opencv-contrib-python-headless = [
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp36-cp36m-macosx_10_15_x86_64.whl", hash = "sha256:3ec06c61beb45771296c1f04cde4ce35bce7b193c425e2b1ccc8ba0c876d82ad"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:0bdb218992e42e9ab887d711fbad33fc7d1b3fd68f6cc31c17e4f4c850ecea05"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:8a19a2bae35194b3d1261a17b170e10ed2da1a9a7ab3a95b24fd7dd411c32161"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp36-cp36m-win32.whl", hash = "sha256:7c87f04ae7a1949b4ef3832eeed3819a61eb95af3c3835a93058d4101923fb1e"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp36-cp36m-win_amd64.whl", hash = "sha256:1dde78203c429116dde4ef1cfe0bbf7f80eb7c9893bbf5ae9eee2e654a158d09"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp37-cp37m-macosx_10_15_x86_64.whl", hash = "sha256:b82a93070efca4ad80dd70c4f3a9b27aa1a3ce238a6648fb4fb477ac918cf4c5"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp37-cp37m-manylinux2014_aarch64.whl", hash = "sha256:a480760e55aa0063a2e64a6c10c25a91e559dd134aee9cc43124d2bb582fb4dd"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:e1c417b82f68efc970020b0649a9a04d30be101ee31e79a48117cc425963966e"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp37-cp37m-win32.whl", hash = "sha256:4f925dee82f2a00e95b7fba0d808d224fdda024ec7ce66f26fd890ec11aa8715"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp37-cp37m-win_amd64.whl", hash = "sha256:ebb813b966488d928a957c6fc5ca46dd47b03bbe90364837cfc1686362485056"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp38-cp38-macosx_10_15_x86_64.whl", hash = "sha256:5834dc25e4fa94836dcb6a4aebd7809103cd57a89fece42dd1f3c296d4d305fb"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:8c1eb049aa16d7c0f9f848e45dc1a793ff0e340163de982fde932142152f68a8"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:e8ea4bec24ed828061cf29b2e39585fcea192963ee07e60b84cdce23ac254005"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp38-cp38-win32.whl", hash = "sha256:e1a95ff4b2cfb71f5b22740fa864db8a4395eb954a029039602a05dfb8ea9bf6"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp38-cp38-win_amd64.whl", hash = "sha256:61dbd625db349a93c11f5a2c03bac0dee249a05d7868c62fa597bbe4e4e41538"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:58d4ccfa2e6c28afb744bb1e07dcc2cd5d9b2adb1adce76cf887108923752659"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:13584a951c47ca809365dac26afdb257114511b698fb6455862e641f3c76ac19"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:d9037610a753538f20c582283b6ea70fdbf8128d3ccb03a53cdfca67b4b516a1"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp39-cp39-win32.whl", hash = "sha256:1e6ce84d9c8e54f3a74f6d41b35ccb4906e57520d5061003ed98c1e9f9c7912b"},
+    {file = "opencv_contrib_python_headless-4.5.2.54-cp39-cp39-win_amd64.whl", hash = "sha256:1deb5938ace69a1e4864956a9bfd45484b4511252dd8c15792f2023c1ebb102f"},
+    {file = "opencv-contrib-python-headless-4.5.5.62.tar.gz", hash = "sha256:6067dea6419cb52c4d4294d8e452fdd7803213382bfb9f0ac02f0738ecb96766"},
+    {file = "opencv_contrib_python_headless-4.5.5.62-cp36-abi3-macosx_10_15_x86_64.whl", hash = "sha256:e1676ced72545a050a8b9e26a07832e091363473b2a7c44735babdc2a5a2a405"},
+    {file = "opencv_contrib_python_headless-4.5.5.62-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ecd910579d4aac4e4ceb696cbe03324de8f70efd47b5b8d296bd80dc7b930ffd"},
+    {file = "opencv_contrib_python_headless-4.5.5.62-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:785ef5c11859b95d378062a95ee2a5dc34563eab03e592910588bbe7be6496fa"},
+    {file = "opencv_contrib_python_headless-4.5.5.62-cp36-abi3-win32.whl", hash = "sha256:57f18506d8f2d9c893dee9ef6fc3b1bfcd1cb60ce24a397cbcceda2fdd87be56"},
+    {file = "opencv_contrib_python_headless-4.5.5.62-cp36-abi3-win_amd64.whl", hash = "sha256:da8d1782c99abcc4e121b944e8965fdee21a575c8c275190e06f374deda0ef00"},
+    {file = "opencv_contrib_python_headless-4.5.5.62-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:c02eceb8dbc8ee103c3b1468cb5dac33125abd50c0a8ee47fb852f0a25664c7e"},
+]
 packaging = [
     {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
@@ -1171,6 +1261,10 @@ requests = [
     {file = "requests-2.27.1-py2.py3-none-any.whl", hash = "sha256:f22fa1e554c9ddfd16e6e41ac79759e17be9e492b3587efa038054674760e72d"},
     {file = "requests-2.27.1.tar.gz", hash = "sha256:68d7c56fd5a8999887728ef304a6d12edc7be74f1cfa47714fc8b414525c9a61"},
 ]
+scenedetect = [
+    {file = "scenedetect-0.5.6.1-py2.py3-none-any.whl", hash = "sha256:b62fc4af18e2e2e34e3af94b8bc1e37eb4b6e0b3c2c4f4058fa7fc6a6714639b"},
+    {file = "scenedetect-0.5.6.1.tar.gz", hash = "sha256:dc25ada3ee8c77097ae78eca068d38c1e9826c52e49dbc753d5bc234a8efe8a3"},
+]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
@@ -1189,6 +1283,10 @@ tinytag = [
 tomli = [
     {file = "tomli-2.0.0-py3-none-any.whl", hash = "sha256:b5bde28da1fed24b9bd1d4d2b8cba62300bfb4ec9a6187a957e8ddb9434c5224"},
     {file = "tomli-2.0.0.tar.gz", hash = "sha256:c292c34f58502a1eb2bbb9f5bbc9a5ebc37bee10ffb8c2d6bbdfa8eb13cc14e1"},
+]
+tqdm = [
+    {file = "tqdm-4.62.3-py2.py3-none-any.whl", hash = "sha256:8dd278a422499cd6b727e6ae4061c40b48fce8b76d1ccbf5d34fca9b7f925b0c"},
+    {file = "tqdm-4.62.3.tar.gz", hash = "sha256:d359de7217506c9851b7869f3708d8ee53ed70a1b8edbba4dbcb47442592920d"},
 ]
 typed-ast = [
     {file = "typed_ast-1.5.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:183b183b7771a508395d2cbffd6db67d6ad52958a5fdc99f450d954003900266"},
