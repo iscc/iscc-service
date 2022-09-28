@@ -1,4 +1,7 @@
-# iscc-service - ISCC Web Service API
+# iscc-service - ISCC Web Service API (DEPRECATED)
+
+**For latest version see: https://github.com/iscc/iscc-web**
+
 [![Version](https://img.shields.io/pypi/v/iscc-service.svg)](https://pypi.python.org/pypi/iscc-service/)
 [![Downloads](https://pepy.tech/badge/iscc-service)](https://pepy.tech/project/iscc-service)
 [![Pulls](https://shields.beevelop.com/docker/pulls/titusz/iscc-service.svg?style=flat-square)](https://hub.docker.com/r/titusz/iscc-service)
